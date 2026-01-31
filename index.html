@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Jan Lönnqvist / Creative Lead, Content Germany / Canva</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #7d2ae8;
+            --teal: #00c4cc;
+            --coral: #ff6b6b;
+            --yellow: #ffc145;
+            --pink: #e84393;
+            --navy: #1a1a2e;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── CONFETTI CANVAS ── */
+        #confettiCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* ── PANEL SYSTEM ── */
+        .panel {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        /* ── HERO ── */
+        .hero-panel {
+            min-height: 100vh;
+            background: var(--navy);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 60px 80px 80px;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 40px;
+            width: fit-content;
+            letter-spacing: 0.5px;
+        }
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--teal);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .hero-title {
+            font-size: clamp(48px, 6vw, 84px);
+            font-weight: 900;
+            line-height: 1.0;
+            letter-spacing: -3px;
+            color: #fff;
+            margin-bottom: 28px;
+        }
+        .hero-title .line {
+            display: block;
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+        .hero-title .accent {
+            -webkit-text-stroke: 2px var(--teal);
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.45);
+            max-width: 420px;
+            opacity: 0;
+        }
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-mosaic {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            height: 100%;
+            gap: 3px;
+        }
+        .mosaic-tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .mosaic-tile:hover { transform: scale(1.05) !important; }
+        .mt-purple { background: var(--purple); color: #fff; }
+        .mt-teal { background: var(--teal); color: var(--navy); }
+        .mt-coral { background: var(--coral); color: #fff; }
+        .mt-yellow { background: var(--yellow); color: var(--navy); }
+        .mt-pink { background: var(--pink); color: #fff; }
+        .mt-navy { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.2); }
+        .mosaic-tile.span2 { grid-column: span 2; }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 80px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.2);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s 1.8s ease forwards;
+        }
+        .scroll-line {
+            width: 40px; height: 2px;
+            background: var(--teal);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse { 0%, 100% { width: 40px; } 50% { width: 20px; } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* ── HORIZONTAL SKILL TICKER ── */
+        .ticker-panel {
+            background: var(--purple);
+            padding: 0;
+            overflow: hidden;
+        }
+        .ticker-row {
+            display: flex;
+            white-space: nowrap;
+            will-change: transform;
+        }
+        .ticker-item {
+            flex-shrink: 0;
+            padding: 20px 40px;
+            font-size: 15px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.5px;
+        }
+        .ticker-item.outline {
+            color: rgba(255,255,255,0.25);
+        }
+        .ticker-divider {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            flex-shrink: 0;
+            align-self: center;
+            margin: 0 8px;
+        }
+
+        /* ── BENTO ABOUT ── */
+        .bento-panel {
+            padding: 80px;
+            background: #f8f7ff;
+        }
+        .bento-header {
+            margin-bottom: 48px;
+        }
+        .bento-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-bottom: 16px;
+        }
+        .bento-tag .td { width: 8px; height: 8px; border-radius: 50%; }
+        .bento-title {
+            font-size: clamp(36px, 4.5vw, 64px);
+            font-weight: 900;
+            letter-spacing: -2.5px;
+            line-height: 1.05;
+            color: var(--navy);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 16px;
+        }
+        .bento-card {
+            border-radius: 24px;
+            padding: 36px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .bento-card:hover { transform: translateY(-8px) scale(1.015); }
+        .bento-card h4 {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .bento-card p {
+            font-size: 13px;
+            line-height: 1.7;
+            opacity: 0.7;
+        }
+        .bento-card .card-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        /* Card variants */
+        .b-wide { grid-column: span 2; }
+        .b-tall { grid-row: span 2; }
+        .b-purple { background: var(--purple); color: #fff; }
+        .b-teal { background: var(--teal); color: var(--navy); }
+        .b-coral { background: var(--coral); color: #fff; }
+        .b-yellow { background: var(--yellow); color: var(--navy); }
+        .b-pink { background: var(--pink); color: #fff; }
+        .b-light { background: #fff; color: var(--navy); border: 1px solid rgba(0,0,0,0.06); }
+        .b-navy { background: var(--navy); color: #fff; }
+
+        /* ── FULL COLOR STATEMENT ── */
+        .statement-panel {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px;
+            position: relative;
+        }
+        .statement-panel h2 {
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 1.0;
+            position: relative;
+            z-index: 2;
+        }
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            will-change: transform;
+            z-index: 1;
+        }
+
+        /* ── HORIZONTAL SCROLL EXPERIENCE ── */
+        .hscroll-panel {
+            background: var(--navy);
+            padding: 80px 0 80px 80px;
+            position: relative;
+        }
+        .hscroll-header {
+            margin-bottom: 48px;
+            padding-right: 80px;
+        }
+        .hscroll-header .bento-tag { color: var(--teal); }
+        .hscroll-header .bento-title { color: #fff; }
+        .hscroll-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 20px;
+            padding-right: 80px;
+            scrollbar-width: none;
+        }
+        .hscroll-track::-webkit-scrollbar { display: none; }
+        .exp-card {
+            flex-shrink: 0;
+            width: 340px;
+            border-radius: 24px;
+            padding: 36px 28px;
+            position: relative;
+            overflow: hidden;
+            scroll-snap-align: start;
+            transition: transform 0.4s;
+        }
+        .exp-card:hover { transform: translateY(-6px); }
+        .exp-card .year {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .exp-card .role {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .exp-card .company {
+            font-size: 14px;
+            opacity: 0.5;
+            margin-bottom: 14px;
+        }
+        .exp-card .desc {
+            font-size: 13px;
+            line-height: 1.7;
+            opacity: 0.6;
+        }
+        .exp-card.ec-teal { background: var(--teal); color: var(--navy); }
+        .exp-card.ec-purple { background: var(--purple); color: #fff; }
+        .exp-card.ec-coral { background: var(--coral); color: #fff; }
+        .exp-card.ec-yellow { background: var(--yellow); color: var(--navy); }
+        .exp-card.ec-pink { background: var(--pink); color: #fff; }
+        .exp-card.ec-light { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.08); }
+        .hscroll-hint {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+            font-weight: 600;
+        }
+        .hscroll-hint .arrow { font-size: 16px; animation: bounceR 1.5s ease-in-out infinite; }
+        @keyframes bounceR { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+
+        /* ── NUMBERS STRIP ── */
+        .numbers-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: #fff;
+        }
+        .num-cell {
+            padding: 56px 40px;
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+        }
+        .num-cell::after {
+            content: '';
+            position: absolute;
+            top: 20%; bottom: 20%; right: 0;
+            width: 1px;
+            background: rgba(0,0,0,0.06);
+        }
+        .num-cell:last-child::after { display: none; }
+        .num-cell:hover { transform: scale(1.05); }
+        .num-cell .big {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
+        .num-cell .label {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(0,0,0,0.35);
+            letter-spacing: 0.5px;
+        }
+
+        /* ── CASE STUDY ── */
+        .case-panel {
+            padding: 100px 80px;
+            background: #f8f7ff;
+        }
+        .case-split {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .case-left h2 {
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+        .case-left p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(26,26,46,0.5);
+        }
+        .case-mosaic {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .case-tile {
+            border-radius: 16px;
+            padding: 28px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.5;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: flex-end;
+        }
+        .case-tile:hover { transform: translateY(-6px) rotate(-1deg); }
+        .case-tile.ct-wide { grid-column: span 2; }
+        .ct-purple { background: var(--purple); color: #fff; }
+        .ct-teal { background: var(--teal); color: var(--navy); }
+        .ct-coral { background: var(--coral); color: #fff; }
+        .ct-yellow { background: var(--yellow); color: var(--navy); }
+
+        /* ── SKILLS SCATTERED ── */
+        .skills-panel {
+            padding: 100px 80px;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .skills-scatter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 40px;
+        }
+        .skill-chip {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 100px;
+            background: #f0f0f5;
+            color: var(--navy);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: default;
+        }
+        .skill-chip:nth-child(6n+1):hover { background: var(--purple); color: #fff; transform: translateY(-4px) rotate(-2deg); }
+        .skill-chip:nth-child(6n+2):hover { background: var(--teal); color: var(--navy); transform: translateY(-4px) rotate(2deg); }
+        .skill-chip:nth-child(6n+3):hover { background: var(--coral); color: #fff; transform: translateY(-4px) rotate(-1deg); }
+        .skill-chip:nth-child(6n+4):hover { background: var(--yellow); color: var(--navy); transform: translateY(-4px) rotate(1deg); }
+        .skill-chip:nth-child(6n+5):hover { background: var(--pink); color: #fff; transform: translateY(-4px) rotate(-2deg); }
+        .skill-chip:nth-child(6n+6):hover { background: var(--navy); color: #fff; transform: translateY(-4px) rotate(2deg); }
+
+        /* ── INFO RIBBON ── */
+        .info-ribbon {
+            background: var(--teal);
+            color: var(--navy);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .ribbon-cell {
+            padding: 48px 40px;
+            position: relative;
+        }
+        .ribbon-cell::after {
+            content: '';
+            position: absolute;
+            top: 20%; bottom: 20%; right: 0;
+            width: 1px;
+            background: rgba(0,0,0,0.08);
+        }
+        .ribbon-cell:last-child::after { display: none; }
+        .ribbon-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+        .ribbon-value {
+            font-size: 17px;
+            font-weight: 800;
+        }
+        .ribbon-sub {
+            font-size: 12px;
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+
+        /* ── CTA ── */
+        .cta-panel {
+            min-height: 80vh;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+            padding: 80px;
+        }
+        .cta-panel h2 {
+            font-size: clamp(48px, 8vw, 100px);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 1.0;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .cta-panel h2 .cta-color {
+            -webkit-text-stroke: 2px var(--teal);
+            -webkit-text-fill-color: transparent;
+        }
+        .cta-panel p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 36px;
+            max-width: 440px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+        .cta-btn {
+            font-size: 15px;
+            font-weight: 800;
+            padding: 18px 52px;
+            background: var(--teal);
+            color: var(--navy);
+            text-decoration: none;
+            border-radius: 100px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 16px 48px rgba(0,196,204,0.3);
+        }
+        .cta-orbs {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .cta-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+
+        footer {
+            background: var(--navy);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 24px 80px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.85);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .hero-panel { grid-template-columns: 1fr; }
+            .hero-left { padding: 60px 32px; }
+            .hero-right { height: 300px; }
+            .hero-scroll-hint { left: 32px; }
+            .bento-panel { padding: 60px 24px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .b-wide, .b-tall { grid-column: auto; grid-row: auto; }
+            .case-panel { padding: 60px 24px; }
+            .case-split { grid-template-columns: 1fr; gap: 40px; }
+            .case-mosaic { grid-template-columns: 1fr 1fr; }
+            .ct-wide { grid-column: auto; }
+            .skills-panel { padding: 60px 24px; }
+            .hscroll-panel { padding: 60px 0 60px 24px; }
+            .hscroll-header { padding-right: 24px; }
+            .numbers-strip { grid-template-columns: 1fr 1fr; }
+            .info-ribbon { grid-template-columns: 1fr; }
+            .ribbon-cell::after { display: none; }
+            .cta-panel { padding: 60px 24px; }
+            .statement-panel { padding: 60px 24px; min-height: 50vh; }
+            footer { padding: 20px 24px; flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── CONFETTI ── -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- ── HERO: Split layout ── -->
+<section class="hero-panel panel">
+    <div class="hero-left">
+        <div class="hero-badge"><div class="dot"></div>Creative Lead, Content Germany</div>
+        <h1 class="hero-title">
+            <span class="line">Truly</span>
+            <span class="line"><span class="accent">Local.</span></span>
+            <span class="line">Truly</span>
+            <span class="line">Creative.</span>
+        </h1>
+        <p class="hero-sub">8+ years leading creative across brands and markets. Content strategy, design systems, multi-market localisation, AI-augmented production. Built for the scale Canva demands.</p>
+    </div>
+    <div class="hero-right">
+        <div class="hero-mosaic">
+            <div class="mosaic-tile mt-purple">Localisation</div>
+            <div class="mosaic-tile mt-teal">Templates</div>
+            <div class="mosaic-tile mt-coral span2">Creative Direction</div>
+            <div class="mosaic-tile mt-yellow">Motion</div>
+            <div class="mosaic-tile mt-navy">AI Tools</div>
+            <div class="mosaic-tile mt-pink span2">Multi-Market Content</div>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
+    </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker-panel panel">
+    <div class="ticker-row" id="tickerRow">
+        <span class="ticker-item">Content Strategy</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Creative Direction</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Localisation</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Templates</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Brand Systems</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Motion Design</span><span class="ticker-divider"></span>
+        <span class="ticker-item">AI Tools</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Social</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Video Production</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Art Direction</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Content Strategy</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Creative Direction</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Localisation</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Templates</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Brand Systems</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Motion Design</span><span class="ticker-divider"></span>
+        <span class="ticker-item">AI Tools</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Social</span><span class="ticker-divider"></span>
+        <span class="ticker-item">Video Production</span><span class="ticker-divider"></span>
+        <span class="ticker-item outline">Art Direction</span><span class="ticker-divider"></span>
+    </div>
+</div>
+
+<!-- ── BENTO: Why Canva ── -->
+<section class="bento-panel panel">
+    <div class="bento-header">
+        <div class="bento-tag"><span class="td" style="background:var(--purple);"></span> Why Canva</div>
+        <h2 class="bento-title reveal">Content that feels<br>made for them.</h2>
+    </div>
+    <div class="bento-grid">
+        <div class="bento-card b-purple b-wide reveal" style="transition-delay:0.05s;">
+            <span class="card-icon">🌍</span>
+            <h4>Multi-Market Native</h4>
+            <p>12+ European markets for DHL. Personally localised hundreds of assets / adjusting layouts, copy, typography, and cultural references. One designer, full pipeline ownership.</p>
+        </div>
+        <div class="bento-card b-teal b-tall reveal" style="transition-delay:0.1s;">
+            <span class="card-icon">🎨</span>
+            <h4>Creative Direction + Craft</h4>
+            <p>I set creative direction and I execute. Art direction, graphic design, motion, video, photography direction, DTP, packaging. From concept to final pixel / I don't just brief the work, I make it.</p>
+        </div>
+        <div class="bento-card b-light reveal" style="transition-delay:0.15s;">
+            <span class="card-icon">📐</span>
+            <h4>Template Thinking</h4>
+            <p>Years of building scalable design systems that maintain quality across formats and markets.</p>
+        </div>
+        <div class="bento-card b-coral reveal" style="transition-delay:0.2s;">
+            <span class="card-icon">🤖</span>
+            <h4>AI-Augmented</h4>
+            <p>AI-generated campaigns, prompt engineering, AI-coded applications. My partner works in AI / I understand the technology.</p>
+        </div>
+        <div class="bento-card b-light reveal" style="transition-delay:0.25s;">
+            <span class="card-icon">⚡</span>
+            <h4>Agency Speed</h4>
+            <p>HelloFresh, DHL, Rituals / all high-volume, tight-deadline environments. Polished creative, fast.</p>
+        </div>
+        <div class="bento-card b-navy b-wide reveal" style="transition-delay:0.3s;">
+            <span class="card-icon">👥</span>
+            <h4>Team + Freelance Leadership</h4>
+            <p>Experience leading teams and managing external creatives at HelloFresh. Briefing, reviewing, developing talent. I build culture while shipping work.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── STATEMENT ── -->
+<section class="statement-panel panel" style="background:var(--coral);">
+    <div class="floating-shape" style="width:200px;height:200px;background:var(--yellow);top:15%;left:10%;" data-float="1"></div>
+    <div class="floating-shape" style="width:150px;height:150px;background:var(--pink);bottom:20%;right:15%;" data-float="2"></div>
+    <div class="floating-shape" style="width:100px;height:100px;background:var(--purple);top:60%;left:60%;" data-float="3"></div>
+    <div class="floating-shape" style="width:80px;height:80px;background:var(--teal);top:25%;right:25%;" data-float="4"></div>
+    <h2 class="reveal-scale" style="color:#fff;">Design for<br>every market.</h2>
+</section>
+
+<!-- ── NUMBERS ── -->
+<div class="numbers-strip panel">
+    <div class="num-cell reveal" style="transition-delay:0s;">
+        <div class="big" style="color:var(--purple);">8+</div>
+        <div class="label">Years Active</div>
+    </div>
+    <div class="num-cell reveal" style="transition-delay:0.1s;">
+        <div class="big" style="color:var(--teal);">12+</div>
+        <div class="label">Markets Localised</div>
+    </div>
+    <div class="num-cell reveal" style="transition-delay:0.2s;">
+        <div class="big" style="color:var(--coral);">100s</div>
+        <div class="label">Assets Delivered</div>
+    </div>
+    <div class="num-cell reveal" style="transition-delay:0.3s;">
+        <div class="big" style="color:var(--yellow);">AI</div>
+        <div class="label">Workflow</div>
+    </div>
+</div>
+
+<!-- ── CASE STUDY ── -->
+<section class="case-panel panel">
+    <div class="bento-tag"><span class="td" style="background:var(--coral);"></span> Case Study / DHL</div>
+    <div class="case-split">
+        <div class="case-left reveal-left">
+            <h2>Data to design<br>to localisation.</h2>
+            <p>Full pipeline ownership at agency level for DHL. Data-driven campaign design, creative direction, and self-led localisation across European markets. The exact workflow Canva needs for truly local content at scale.</p>
+        </div>
+        <div class="case-mosaic">
+            <div class="case-tile ct-purple ct-wide reveal-right" style="transition-delay:0.05s;">Data-Driven Campaign Design</div>
+            <div class="case-tile ct-teal reveal-right" style="transition-delay:0.15s;">Self-Led Localisation</div>
+            <div class="case-tile ct-yellow reveal-right" style="transition-delay:0.1s;">AI Campaign / GLS</div>
+            <div class="case-tile ct-coral ct-wide reveal-right" style="transition-delay:0.2s;">Hammam / Record Sales at Rituals</div>
+        </div>
+    </div>
+</section>
+
+<!-- ── HORIZONTAL SCROLL EXPERIENCE ── -->
+<section class="hscroll-panel panel">
+    <div class="hscroll-header">
+        <div class="bento-tag" style="color:var(--teal);"><span class="td" style="background:var(--teal);"></span> Experience</div>
+        <h2 class="bento-title" style="color:#fff;">From print houses<br>to content at scale.</h2>
+    </div>
+    <div class="hscroll-track" id="hscrollTrack">
+        <div class="exp-card ec-teal">
+            <div class="year">2024</div>
+            <div class="role">Senior Graphic Designer</div>
+            <div class="company">DHL / Agency / Multi-Market</div>
+            <div class="desc">Data-driven campaigns, self-led localisation across 12+ European markets.</div>
+        </div>
+        <div class="exp-card ec-purple">
+            <div class="year">2022 — 2024</div>
+            <div class="role">Visual Specialist</div>
+            <div class="company">Rituals Cosmetics</div>
+            <div class="desc">DTP, design, seasonal campaigns across digital, packaging, retail, spatial.</div>
+        </div>
+        <div class="exp-card ec-coral">
+            <div class="year">2022</div>
+            <div class="role">Creative / DTP</div>
+            <div class="company">HelloFresh</div>
+            <div class="desc">High-volume production, team leading, project management.</div>
+        </div>
+        <div class="exp-card ec-yellow">
+            <div class="year">2019 — 2020</div>
+            <div class="role">Graphic Artist</div>
+            <div class="company">IKEA Group</div>
+            <div class="desc">DTP and graphic design for retail campaigns.</div>
+        </div>
+        <div class="exp-card ec-pink">
+            <div class="year">2019</div>
+            <div class="role">Art Director</div>
+            <div class="company">Valve / Helsinki</div>
+            <div class="desc">Art direction, creative strategy, graphic design.</div>
+        </div>
+        <div class="exp-card ec-light">
+            <div class="year">2013 — 2019</div>
+            <div class="role">Designer / DTP / Prepress</div>
+            <div class="company">Planex, Pixmill, Cocomms, Lönnberg, Multiprint</div>
+            <div class="desc">Print production, prepress, colour management. The craft foundation.</div>
+        </div>
+    </div>
+    <div class="hscroll-hint"><span class="arrow">→</span> Scroll to see more</div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section class="skills-panel panel">
+    <div class="bento-tag"><span class="td" style="background:var(--purple);"></span> Tools & Skills</div>
+    <h2 class="bento-title reveal" style="margin-bottom:8px;">Everything<br>in the toolkit.</h2>
+    <div class="skills-scatter" id="skillsScatter">
+        <div class="skill-chip">After Effects</div>
+        <div class="skill-chip">Photoshop</div>
+        <div class="skill-chip">Illustrator</div>
+        <div class="skill-chip">InDesign</div>
+        <div class="skill-chip">Premiere Pro</div>
+        <div class="skill-chip">Figma</div>
+        <div class="skill-chip">Midjourney</div>
+        <div class="skill-chip">AI Tools</div>
+        <div class="skill-chip">Content Strategy</div>
+        <div class="skill-chip">Creative Direction</div>
+        <div class="skill-chip">Motion Design</div>
+        <div class="skill-chip">Video Production</div>
+        <div class="skill-chip">Brand Systems</div>
+        <div class="skill-chip">Typography</div>
+        <div class="skill-chip">Art Direction</div>
+        <div class="skill-chip">DTP / Print</div>
+        <div class="skill-chip">Localisation</div>
+        <div class="skill-chip">Template Design</div>
+        <div class="skill-chip">Photography Direction</div>
+        <div class="skill-chip">Team Leadership</div>
+    </div>
+</section>
+
+<!-- ── INFO RIBBON ── -->
+<div class="info-ribbon panel">
+    <div class="ribbon-cell">
+        <div class="ribbon-label">Location</div>
+        <div class="ribbon-value">Amsterdam, NL</div>
+        <div class="ribbon-sub">Open to Berlin relocation</div>
+    </div>
+    <div class="ribbon-cell">
+        <div class="ribbon-label">Languages</div>
+        <div class="ribbon-value">Fluent English, Native Finnish</div>
+        <div class="ribbon-sub">International team experience</div>
+    </div>
+    <div class="ribbon-cell">
+        <div class="ribbon-label">Education</div>
+        <div class="ribbon-value">Bachelor of Culture and Arts</div>
+        <div class="ribbon-sub">Graphic Design / Helsinki</div>
+    </div>
+</div>
+
+<!-- ── CTA ── -->
+<section class="cta-panel panel">
+    <div class="cta-orbs">
+        <div class="cta-orb" style="width:400px;height:400px;background:var(--purple);top:-10%;left:-5%;" data-float="1"></div>
+        <div class="cta-orb" style="width:300px;height:300px;background:var(--teal);bottom:-10%;right:-5%;" data-float="2"></div>
+        <div class="cta-orb" style="width:200px;height:200px;background:var(--coral);top:40%;left:60%;" data-float="3"></div>
+    </div>
+    <h2 class="reveal-scale">Let's make it<br><span class="cta-color">truly local.</span></h2>
+    <p class="reveal" style="transition-delay:0.1s;">Content strategy, creative direction, multi-market localisation. Ready to build Canva's content library for Germany.</p>
+    <a href="mailto:jan.lonnqvist@windowslive.com" class="cta-btn reveal" style="transition-delay:0.2s;">Get in Touch</a>
+</section>
+
+<footer>
+    <span>Jan Lönnqvist / 2026</span>
+    <span>jan.lonnqvist@windowslive.com</span>
+</footer>
+
+<script>
+// ── HERO ANIMATIONS ──
+const heroLines = document.querySelectorAll('.hero-title .line');
+heroLines.forEach((line, i) => {
+    setTimeout(() => {
+        line.style.transition = 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)';
+        line.style.opacity = '1';
+        line.style.transform = 'translateX(0)';
+    }, 300 + i * 120);
+});
+const heroSub = document.querySelector('.hero-sub');
+setTimeout(() => {
+    heroSub.style.transition = 'opacity 0.8s ease';
+    heroSub.style.opacity = '1';
+}, 900);
+
+// Mosaic tiles stagger in
+document.querySelectorAll('.mosaic-tile').forEach((tile, i) => {
+    setTimeout(() => {
+        tile.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+        tile.style.opacity = '1';
+        tile.style.transform = 'scale(1)';
+    }, 400 + i * 100);
+});
+
+// ── CONFETTI PARTICLES ──
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+let cW, cH;
+const colors = ['#7d2ae8', '#00c4cc', '#ff6b6b', '#ffc145', '#e84393'];
+const particles = [];
+
+function resizeCanvas() {
+    cW = canvas.width = window.innerWidth;
+    cH = canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+    constructor() { this.reset(); }
+    reset() {
+        this.x = Math.random() * cW;
+        this.y = Math.random() * cH;
+        this.size = Math.random() * 5 + 2;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.25 + 0.05;
+        this.rotation = Math.random() * 360;
+        this.rotSpeed = (Math.random() - 0.5) * 2;
+        this.shape = Math.random() > 0.5 ? 'circle' : 'rect';
+    }
+    update() {
+        this.x += this.speedX + scrollVel * 0.02;
+        this.y += this.speedY - Math.abs(scrollVel) * 0.03;
+        this.rotation += this.rotSpeed;
+        if (this.x < -20) this.x = cW + 20;
+        if (this.x > cW + 20) this.x = -20;
+        if (this.y < -20) this.y = cH + 20;
+        if (this.y > cH + 20) this.y = -20;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation * Math.PI / 180);
+        ctx.fillStyle = this.color;
+        if (this.shape === 'circle') {
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.fillRect(-this.size, -this.size / 2, this.size * 2, this.size);
+        }
+        ctx.restore();
+    }
+}
+
+for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+// ── SMOOTH SCROLL ──
+let smoothSy = 0, targetSy = 0, prevSy = 0, scrollVel = 0;
+window.addEventListener('scroll', () => { targetSy = window.scrollY; });
+
+// ── TICKER ──
+const tickerRow = document.getElementById('tickerRow');
+let tickerOffset = 0;
+
+// ── FLOATING SHAPES ──
+const floatingShapes = document.querySelectorAll('[data-float]');
+let floatTime = 0;
+
+// ── REVEAL OBSERVER ──
+const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => revealObs.observe(el));
+
+// ── SKILLS STAGGER ──
+const skillsObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.skill-chip').forEach((chip, i) => {
+                chip.style.opacity = '0';
+                chip.style.transform = 'translateY(20px) scale(0.9) rotate(' + (Math.random() * 6 - 3) + 'deg)';
+                chip.style.transition = `opacity 0.5s ${i * 0.03}s, transform 0.5s ${i * 0.03}s cubic-bezier(0.22, 1, 0.36, 1)`;
+                setTimeout(() => {
+                    chip.style.opacity = '1';
+                    chip.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                }, 20);
+            });
+            skillsObs.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.2 });
+document.querySelectorAll('.skills-scatter').forEach(g => skillsObs.observe(g));
+
+// ── MAIN LOOP ──
+function mainLoop() {
+    requestAnimationFrame(mainLoop);
+
+    smoothSy += (targetSy - smoothSy) * 0.08;
+    scrollVel = smoothSy - prevSy;
+    prevSy = smoothSy;
+    floatTime += 0.01;
+
+    // Confetti
+    ctx.clearRect(0, 0, cW, cH);
+    particles.forEach(p => { p.update(); p.draw(); });
+
+    // Ticker
+    const absVel = Math.abs(scrollVel);
+    tickerOffset -= 0.8 + absVel * 0.5;
+    if (tickerRow) {
+        const half = tickerRow.scrollWidth / 2;
+        if (Math.abs(tickerOffset) > half) tickerOffset += half;
+        tickerRow.style.transform = `translateX(${tickerOffset}px)`;
+    }
+
+    // Floating shapes
+    floatingShapes.forEach(shape => {
+        const id = parseFloat(shape.dataset.float);
+        const xOff = Math.sin(floatTime * (0.5 + id * 0.3)) * (20 + id * 10);
+        const yOff = Math.cos(floatTime * (0.4 + id * 0.2)) * (15 + id * 8);
+        shape.style.transform = `translate(${xOff}px, ${yOff}px)`;
+    });
+
+    // Hero parallax on scroll
+    const heroLeft = document.querySelector('.hero-left');
+    const heroRight = document.querySelector('.hero-right');
+    if (heroLeft && smoothSy < window.innerHeight) {
+        const fade = Math.max(0, 1 - smoothSy / (window.innerHeight * 0.5));
+        heroLeft.style.opacity = fade;
+        heroLeft.style.transform = `translateY(${-smoothSy * 0.2}px)`;
+    }
+    if (heroRight && smoothSy < window.innerHeight) {
+        heroRight.style.transform = `translateY(${-smoothSy * 0.1}px)`;
+    }
+}
+mainLoop();
+</script>
+
+</body>
+</html>
