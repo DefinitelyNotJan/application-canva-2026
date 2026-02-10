@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Jan Lönnqvist / Creative Lead, Content Germany / Canva</title>
+    <title>Jan Lönnqvist / Creative / DTP, Content Germany / Canva</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -655,7 +655,7 @@
 <!-- ── HERO: Split layout ── -->
 <section class="hero-panel panel">
     <div class="hero-left">
-        <div class="hero-badge"><div class="dot"></div>Creative Lead, Content Germany</div>
+        <div class="hero-badge"><div class="dot"></div>Creative / DTP, Content Germany</div>
         <h1 class="hero-title">
             <span class="line">Truly</span>
             <span class="line"><span class="accent">Local.</span></span>
@@ -880,9 +880,9 @@
         <div class="ribbon-sub">International team experience</div>
     </div>
     <div class="ribbon-cell">
-        <div class="ribbon-label">Education</div>
-        <div class="ribbon-value">Bachelor of Culture and Arts</div>
-        <div class="ribbon-sub">Graphic Design / Helsinki</div>
+        <div class="ribbon-label">Availability</div>
+        <div class="ribbon-value">Immediate</div>
+        <div class="ribbon-sub">Ready to start</div>
     </div>
 </div>
 
@@ -904,6 +904,49 @@
 </footer>
 
 <script>
+// Advanced Protection
+(function(){
+    // Disable right-click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Disable keyboard shortcuts for dev tools
+    document.addEventListener('keydown', e => {
+        if (e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && ['I','J','C','K'].includes(e.key.toUpperCase())) ||
+            (e.ctrlKey && e.key.toUpperCase() === 'U') ||
+            (e.metaKey && e.altKey && ['I','J','C','K','U'].includes(e.key.toUpperCase())) ||
+            (e.metaKey && e.shiftKey && e.key.toUpperCase() === 'C')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Disable text selection
+    document.addEventListener('selectstart', e => e.preventDefault());
+
+    // Disable drag
+    document.addEventListener('dragstart', e => e.preventDefault());
+
+    // Detect DevTools
+    const devtools = { open: false };
+    const threshold = 160;
+    setInterval(() => {
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        if (widthThreshold || heightThreshold) {
+            if (!devtools.open) {
+                devtools.open = true;
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:sans-serif;font-size:24px;">Access Denied</div>';
+            }
+        }
+    }, 500);
+
+    // Clear console
+    console.clear();
+    console.log('%cStop!', 'color:red;font-size:48px;font-weight:bold');
+    console.log('%cThis is a protected application.', 'font-size:16px');
+})();
+
 // ── HERO ANIMATIONS ──
 const heroLines = document.querySelectorAll('.hero-title .line');
 heroLines.forEach((line, i) => {
